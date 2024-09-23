@@ -1,12 +1,10 @@
-const express = require('express');
-const WhatsappController = require('./controllers/WhatsappController');
+import express from 'express';
+import WhatsappController from '../controllers/WhatsappController.mjs';
 
-const app = express();
-const port = 3000;
-
+const router = express.Router();
 const whatsappController = new WhatsappController();
 
-app.get('/api/whatsapp/getqrcode', async (req, res) => {
+router.get('/getqrcode', async (req, res) => {
     try {
         const qrCode = await whatsappController.getQRCode();
         res.send(qrCode);
@@ -15,7 +13,7 @@ app.get('/api/whatsapp/getqrcode', async (req, res) => {
     }
 });
 
-app.post('/api/whatsapp/sendmessage', express.json(), async (req, res) => {
+router.post('/sendmessage', express.json(), async (req, res) => {
     const { number, message } = req.body;
 
     if (!number || !message) {
@@ -30,7 +28,7 @@ app.post('/api/whatsapp/sendmessage', express.json(), async (req, res) => {
     }
 });
 
-app.get('/api/whatsapp/test/:number', async (req, res) => {
+router.get('/test/:number', async (req, res) => {
     const { number } = req.params;
     const message = 'Olá, somos a Hawx Soluções!';
 
@@ -42,6 +40,4 @@ app.get('/api/whatsapp/test/:number', async (req, res) => {
     }
 });
 
-app.listen(port, () => {
-    console.log(`Servidor rodando em http://localhost:${port}`);
-});
+export default router;

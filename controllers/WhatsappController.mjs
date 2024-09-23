@@ -1,7 +1,7 @@
-const { Client, LocalAuth } = require('whatsapp-web.js');
-const qrcode = require('qrcode-terminal');
+import pkg from 'whatsapp-web.js';
+const { Client, LocalAuth } = pkg;
 
-class WhatsappController {
+export default class WhatsappController {
     constructor() {
         this.client = new Client({
             authStrategy: new LocalAuth(),
@@ -18,7 +18,7 @@ class WhatsappController {
         this.client.initialize();
     }
 
-    getQRCode() {
+    async getQRCode() {
         return new Promise((resolve, reject) => {
             this.client.on('qr', (qr) => {
                 resolve(qr);
@@ -26,7 +26,7 @@ class WhatsappController {
         });
     }
 
-    sendMessage(number, message) {
+    async sendMessage(number, message) {
         return new Promise((resolve, reject) => {
             const chatId = number.substring(1) + "@c.us";
             if (!this.client) {
@@ -42,8 +42,4 @@ class WhatsappController {
                 });
         });
     }
-    
-    
 }
-
-module.exports = WhatsappController;
